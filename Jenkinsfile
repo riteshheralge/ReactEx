@@ -9,6 +9,15 @@ pipeline {
             }
         }
 
+        stage('check node version'){
+            steps{
+                  bat '''
+                        node --version
+                        npm --version
+                  '''
+            }
+        }
+
         stage('Build React') {
             steps {
                 bat '''
