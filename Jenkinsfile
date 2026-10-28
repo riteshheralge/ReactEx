@@ -3,22 +3,20 @@ pipeline {
     agent any
 
     stages {
-        stage('Build') {
-            agent {
-                docker {
-                    image 'node'
-                    reuseNode true
-                }
-            }
-
+        stage('Check Docker') {
             steps {
-                sh '''
-                    pwd
-                    node --version
-                    npm --version
-                    npm ci
-                    npm run build
-                    pwd
+                bat 'docker --version'
+            }
+        }
+
+        stage('Build React') {
+            steps {
+                bat '''
+                    docker run --rm ^
+                    -v "%CD%:/app" ^
+                    -w /app ^
+                    node:24-alpine ^
+                    sh -c "node --version && npm --version && npm ci && npm run build"
                 '''
             }
         }
